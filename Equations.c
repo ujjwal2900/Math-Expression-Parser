@@ -4,9 +4,12 @@
 #include "ParserExport.h"
 #include "MExprcppEnums.h"
 
+/*
+The below implementation parses the equation of a circle and ellipse
+x^2 + y^2 = r^2
+pow(x,2)+pow(y,2)=<CONSTANT>
+*/
 
-// x^2 + y^2 = r^2
-//pow(x,2)+pow(y,2)=<CONSTANT>
 parse_rc_t circle_eqn(){
 
     parse_init();

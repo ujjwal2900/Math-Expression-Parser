@@ -31,6 +31,8 @@ typedef enum {
     MATH_CPP_LESS_THAN,
     MATH_CPP_LESS_THAN_EQ,
     MATH_CPP_GREATER_THAN,
+    MATH_CPP_GREATER_THAN_EQ,
+
 
     /* Logical Operators */
     MATH_CPP_OR,
@@ -69,9 +71,9 @@ typedef enum {
 
 typedef enum {
 
-    PARSER_EOL = (int)MATH_CPP_DTYPE_MAX+1,
-    PARSER_QUIT= (int)MATH_CPP_DTYPE_MAX+2,
-    PARSER_WHITE_SPACE = (int)MATH_CPP_DTYPE_MAX+3
+    PARSER_EOL = (int)MATH_CPP_DTYPE_MAX+100000,
+    PARSER_QUIT= (int)MATH_CPP_DTYPE_MAX+100001,
+    PARSER_WHITE_SPACE = (int)MATH_CPP_DTYPE_MAX+100003
 } EXTRA_ENUMS;
 
 static inline int 

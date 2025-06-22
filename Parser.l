@@ -54,6 +54,7 @@ static lex_data_t lex_pop(){
     return res;
 }
 
+/*
 void RESTORE_CHKP(int a){
 
     while(undo_stack.top != a){
@@ -62,6 +63,7 @@ void RESTORE_CHKP(int a){
     }
     
 }
+*/
 
 static void process_white_space(int n){
 
@@ -168,6 +170,10 @@ void yyrewind(int n){
 
 "<=" {
     return MATH_CPP_LESS_THAN_EQ;
+}
+
+">=" {
+    return MATH_CPP_GREATER_THAN_EQ;
 }
 
 "<" {
@@ -308,8 +314,11 @@ void yyrewind(int n){
 
 %%
 
-//#include "Equations.c"
 extern void Parse_Equations();
+extern parse_rc_t A();
+extern parse_rc_t Q();
+extern parse_rc_t E();
+extern lex_data_t **mexpr_convert_infix_to_postfix(lex_data_t *infix, int sizein, int &sizeout);
 
 // C main function
 int main(int argc, char **argv)
@@ -326,7 +335,87 @@ int main(int argc, char **argv)
 
         lex_set_scan_buffer(lex_buffer);
 
-        Parse_Equations();
+        //Parse_Equations();
+        //parse_rc_t err = A();
+
+        #if 1
+        parse_rc_t err = E();
+
+        if(err == PARSE_ERR){
+            printf("E : rejected\n");
+            for(int i=0;i<=undo_stack.top;i++){
+
+                lex_data_t *lex_data = &undo_stack.data[i];
+                printf("%s", lex_data->token_val);
+            }
+            printf("\n");
+        }
+        else{
+            //yyrewind(1);
+
+            int token_code = cyylex();
+            if(token_code != PARSER_EOL)
+                printf("E : Rejected\n");
+            else
+                printf("E : Accepted\n");
+
+            for(int i=0;i<=undo_stack.top;i++){
+
+                lex_data_t *lex_data = &undo_stack.data[i];
+                printf("%s", lex_data->token_val);
+            }
+            
+            printf("\n");
+        }
+        #endif
+
+        #if 1
+
+        int sizeout = 0;
+        lex_data_t **postfix_array = mexpr_convert_infix_to_postfix(
+                                        undo_stack.data,
+                                        undo_stack.top,
+                                        sizeout);
+
+        //print the postfix array here to verify
+        printf("Sizeout - %d\n", sizeout);
+        printf("Print the postfix array : ");
+        for(int i=0;i<sizeout;i++)
+        {
+            lex_data_t *lex_data = postfix_array[i];
+            printf("%s ", lex_data->token_val);
+            
+        }
+        printf("\n");
+
+        //free(lex_data->token_val);
+            //free(lex_data);
+        #endif
+
+        
+
+        # if 0
+        parse_rc_t err = Q();
+        if(err==PARSE_ERR){
+            printf("A : rejected\n");
+            for(int i=0;i<=undo_stack.top;i++){
+
+                lex_data_t *lex_data = &undo_stack.data[i];
+                printf("%s", lex_data->token_val);
+            }
+        }
+        else{
+                printf("A : accepted\n");
+
+            for(int i=0;i<=undo_stack.top;i++){
+
+                lex_data_t *lex_data = &undo_stack.data[i];
+                printf("%s", lex_data->token_val);
+            }
+            
+            
+        }
+        #endif
 
         parser_stack_reset();
 

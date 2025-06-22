@@ -47,9 +47,12 @@ extern int lex_curr_token_len;
 
 
 #define CHECKPOINT(a)   \
-    a = undo_stack.top
+    a = undo_stack.top;
 
-extern void RESTORE_CHKP(int a);
+//extern void RESTORE_CHKP(int a);
+
+#define RESTORE_CHKP(a) \
+    yyrewind(undo_stack.top - a);
 
 #define PARSER_LOG_ERR(token_obtained, expected_token)  \
         printf("%s(%d): Token Obtained=%d(%s), expected token=%d\n",   \
@@ -65,8 +68,14 @@ extern void RESTORE_CHKP(int a);
         return PARSE_SUCCESS;
 
 #define RETURN_PARSE_ERROR  \
+        { yyrewind(undo_stack.top - _lchkp);  \
+          return PARSE_ERR; }
+
+/*
+#define RETURN_PARSE_ERROR  \
         { printf("Error at - %s \n", lex_curr_token); \
           RESTORE_CHKP(_lchkp);  \
           return PARSE_ERR; }
+*/
 
 #endif
