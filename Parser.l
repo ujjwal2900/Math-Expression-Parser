@@ -105,6 +105,9 @@ cyylex()
 int cyylex(){
 
     int token_code = yylex();
+    #if 0
+    printf("yytext=%s, token_code = %d \n", yytext, token_code);
+    #endif
     lex_data_t lex_data;
     lex_data.token_code = token_code;
     lex_data.token_len = yyleng;
@@ -155,10 +158,8 @@ void yyrewind(int n){
 
  // Write Regular expressions here to generate tokens
 
-"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])" {
-    
-    return MATH_CPP_IPV4;
-}
+
+
 
 "(" {
     return MATH_CPP_BRACKET_START;
@@ -209,7 +210,7 @@ void yyrewind(int n){
 }
 
 "-" {
-    return  MATH_CPP_MINUS;
+    return MATH_CPP_MINUS;
 }
 
 "/" {
@@ -272,7 +273,7 @@ void yyrewind(int n){
     return PARSER_QUIT;
 }
 
-0|-?[1-9][0-9]* {
+0|[1-9][0-9]* {
     return MATH_CPP_INT;
 }
 
@@ -323,6 +324,15 @@ extern lex_data_t **mexpr_convert_infix_to_postfix(lex_data_t *infix, int sizein
 // C main function
 int main(int argc, char **argv)
 {
+    printf("%d MATH_CPP_INT \n",MATH_CPP_INT);
+    printf("%d MATH_CPP_DOUBLE \n",MATH_CPP_DOUBLE);
+    printf("%d MATH_CPP_VARIABLE \n",MATH_CPP_VARIABLE);
+    printf("%d MATH_CPP_IDENTIFIER \n",MATH_CPP_IDENTIFIER);
+    printf("%d MATH_CPP_IDENTIFIER_IDENTIFIER \n",MATH_CPP_IDENTIFIER_IDENTIFIER);
+    printf("%d MATH_CPP_MINUS \n",MATH_CPP_MINUS);
+
+
+
     while(1){
 
         printf("Input-> ");
@@ -342,7 +352,7 @@ int main(int argc, char **argv)
         parse_rc_t err = E();
 
         if(err == PARSE_ERR){
-            printf("E : rejected\n");
+            printf("E : rejected1\n");
             for(int i=0;i<=undo_stack.top;i++){
 
                 lex_data_t *lex_data = &undo_stack.data[i];
@@ -355,7 +365,7 @@ int main(int argc, char **argv)
 
             int token_code = cyylex();
             if(token_code != PARSER_EOL)
-                printf("E : Rejected\n");
+                printf("E : Rejected2\n");
             else
                 printf("E : Accepted\n");
 
@@ -433,3 +443,13 @@ int main(int argc, char **argv)
         */
     }
 }
+/*
+"(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])" {
+    
+    return MATH_CPP_IPV4;
+}
+
+0|-?[1-9][0-9]* {
+    return MATH_CPP_INT;
+}
+*/

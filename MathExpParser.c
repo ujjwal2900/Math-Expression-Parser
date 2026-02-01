@@ -62,6 +62,7 @@ parse_rc_t T()
     
 
     RESTORE_CHKP(initial_chkp);
+    #if 1
 
     err = G();
 
@@ -78,11 +79,14 @@ parse_rc_t T()
 
     RESTORE_CHKP(initial_chkp);
 
+    /*
     err = Q();
     if(err == PARSE_SUCCESS)
         RETURN_PARSE_SUCCESS;
     
     RESTORE_CHKP(initial_chkp);
+    */
+    #endif
 
     token_code = cyylex();
 
@@ -91,6 +95,9 @@ parse_rc_t T()
         case MATH_CPP_INT:
         case MATH_CPP_DOUBLE:
         case MATH_CPP_VARIABLE:
+        case MATH_CPP_IDENTIFIER:
+        case MATH_CPP_IDENTIFIER_IDENTIFIER:
+        case MATH_CPP_STRING:
             RETURN_PARSE_SUCCESS;
 
         
@@ -102,114 +109,6 @@ parse_rc_t T()
     RETURN_PARSE_ERROR;
 }
 
-parse_rc_t P()
-{
-    parse_init();
-
-    int initial_chkp;
-    CHECKPOINT(initial_chkp);
-
-    do{
-
-        token_code = cyylex();
-
-        if(token_code == MATH_CPP_SQRT)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RESTORE_CHKP(initial_chkp);
-
-    do{
-
-        token_code = cyylex();
-
-        if(token_code == MATH_CPP_SQR)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RESTORE_CHKP(initial_chkp);
-
-    do{
-
-        token_code = cyylex();
-        if(token_code == MATH_CPP_SIN)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RESTORE_CHKP(initial_chkp);
-
-    do{
-
-        token_code = cyylex();
-        if(token_code == MATH_CPP_COS)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RETURN_PARSE_ERROR;
-
-}
-
-parse_rc_t G()
-{
-    parse_init();
-
-    int initial_chkp;
-    CHECKPOINT(initial_chkp);
-
-    do{
-        token_code = cyylex();
-        if(token_code == MATH_CPP_MAX)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RESTORE_CHKP(initial_chkp);
-
-    do{
-        token_code = cyylex();
-        if(token_code == MATH_CPP_MIN)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RESTORE_CHKP(initial_chkp);
-
-    do{
-        token_code = cyylex();
-        if(token_code == MATH_CPP_POW)
-            RETURN_PARSE_SUCCESS;
-    }while(0);
-
-    RETURN_PARSE_ERROR;
-}
-
-parse_rc_t Q()
-{
-    parse_init();
-
-    err = E();
-
-    if(err == PARSE_ERR)
-        RETURN_PARSE_ERROR;
-    
-    token_code = cyylex();
-
-    switch (token_code)
-    {
-        case MATH_CPP_LESS_THAN:
-        case MATH_CPP_GREATER_THAN:
-        case MATH_CPP_LESS_THAN_EQ:
-        case MATH_CPP_GREATER_THAN_EQ:
-        case MATH_CPP_EQ:
-        case MATH_CPP_NEQ:
-            err = E();
-            if(err == PARSE_ERR)
-                RETURN_PARSE_ERROR;
-            RETURN_PARSE_SUCCESS;
-        default:
-            RETURN_PARSE_ERROR;
-
-    }
-    RETURN_PARSE_ERROR;
-}
 
 parse_rc_t F_dash()
 {
@@ -342,3 +241,114 @@ parse_rc_t E()
     RETURN_PARSE_SUCCESS;
 }
 
+
+
+
+parse_rc_t P()
+{
+    parse_init();
+
+    int initial_chkp;
+    CHECKPOINT(initial_chkp);
+
+    do{
+
+        token_code = cyylex();
+
+        if(token_code == MATH_CPP_SQRT)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RESTORE_CHKP(initial_chkp);
+
+    do{
+
+        token_code = cyylex();
+
+        if(token_code == MATH_CPP_SQR)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RESTORE_CHKP(initial_chkp);
+
+    do{
+
+        token_code = cyylex();
+        if(token_code == MATH_CPP_SIN)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RESTORE_CHKP(initial_chkp);
+
+    do{
+
+        token_code = cyylex();
+        if(token_code == MATH_CPP_COS)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RETURN_PARSE_ERROR;
+
+}
+
+parse_rc_t G()
+{
+    parse_init();
+
+    int initial_chkp;
+    CHECKPOINT(initial_chkp);
+
+    do{
+        token_code = cyylex();
+        if(token_code == MATH_CPP_MAX)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RESTORE_CHKP(initial_chkp);
+
+    do{
+        token_code = cyylex();
+        if(token_code == MATH_CPP_MIN)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RESTORE_CHKP(initial_chkp);
+
+    do{
+        token_code = cyylex();
+        if(token_code == MATH_CPP_POW)
+            RETURN_PARSE_SUCCESS;
+    }while(0);
+
+    RETURN_PARSE_ERROR;
+}
+
+parse_rc_t Q()
+{
+    parse_init();
+
+    err = E();
+
+    if(err == PARSE_ERR)
+        RETURN_PARSE_ERROR;
+    
+    token_code = cyylex();
+
+    switch (token_code)
+    {
+        case MATH_CPP_LESS_THAN:
+        case MATH_CPP_GREATER_THAN:
+        case MATH_CPP_LESS_THAN_EQ:
+        case MATH_CPP_GREATER_THAN_EQ:
+        case MATH_CPP_EQ:
+        case MATH_CPP_NEQ:
+            err = E();
+            if(err == PARSE_ERR)
+                RETURN_PARSE_ERROR;
+            RETURN_PARSE_SUCCESS;
+        default:
+            RETURN_PARSE_ERROR;
+
+    }
+    RETURN_PARSE_ERROR;
+}
