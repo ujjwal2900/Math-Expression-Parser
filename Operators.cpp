@@ -107,7 +107,7 @@ OperatorSqr::OperatorSqr(){
 
     this->opid = MATH_CPP_SQR;
     this->name = "sqr";
-    this->is_unary = false;
+    this->is_unary = true;
 }
 
 OperatorSqr::~OperatorSqr(){
@@ -118,7 +118,7 @@ OperatorSqrt::OperatorSqrt(){
 
     this->opid = MATH_CPP_SQRT;
     this->name = "sqrt";
-    this->is_unary = false;
+    this->is_unary = true;
 }
 
 OperatorSqrt::~OperatorSqrt(){
