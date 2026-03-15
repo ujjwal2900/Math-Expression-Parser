@@ -57,11 +57,6 @@ The project consists of several key components:
 5. **Tree Building**: Postfix tokens are used to construct a binary expression tree
 6. **Output**: The expression tree is traversed and printed in inorder fashion
 
-### Key Algorithms
-
-- **Shunting-yard Algorithm**: For infix to postfix conversion
-- **Stack-based Tree Construction**: For building expression trees from postfix notation
-- **Recursive Descent Parsing**: For grammar validation
 
 ## Framework and Technologies
 
